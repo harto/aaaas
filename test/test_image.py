@@ -19,7 +19,14 @@ class ImageTests(TestCase):
     def test_pixel_to_char_invalid(self):
         self.assertRaises(IndexError, lambda: image.to_char(256))
 
-    def test_image_to_ascii_max_char_width(self):
+    def test_image_to_ascii_max_width(self):
         text = image.to_ascii(path.join(path.dirname(__file__), 'test.png'),
-                              max_char_width=20)
+                              max_size=(20,300))
         self.assertEqual(text.index('\n'), 20)
+
+    def test_image_to_ascii_max_height(self):
+        text = image.to_ascii(path.join(path.dirname(__file__), 'test.png'),
+                              max_size=(300,20))
+        self.assertEqual(len(text.split('\n')), 20)
+
+
