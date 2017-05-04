@@ -5,19 +5,21 @@ ASCII characters.
 
 from PIL import Image
 
-pixel_chars = ['#', 'O', 'o', '.', ' ']
-inverted_pixel_chars = list(reversed(pixel_chars))
+palette = ['#', 'O', 'o', '.', ' ']
+# Note: we could alternatively invert the image color scheme
+# before converting to text using PIL.ImageOps.invert()
+inverted_palette = list(reversed(palette))
 
 def to_char(val, invert=False):
     """
-    Map a pixel brightness value [0,255] to some ASCII representation
+    Map a pixel brightness value in the range [0, 255] to some ASCII
+    representation.
     """
-    chars = invert and inverted_pixel_chars or pixel_chars
+    chars = invert and inverted_palette or palette
     i = int(val/256 * len(chars))
     return chars[i]
 
 def _maybe_resize(im, max_w, max_h):
-
     w, h = im.size
     if w > max_w or h > max_h:
         ratio = min(max_w / w, max_h / h)
@@ -25,7 +27,6 @@ def _maybe_resize(im, max_w, max_h):
     return im
 
 def _normalize_image(im, max_size=None):
-    w, h = im.size
     if max_size:
         max_w, max_h = max_size
         im = _maybe_resize(im, max_w, max_h)
